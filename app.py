@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -10,9 +10,21 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/calendar")
+@app.route("/calendar", methods=["GET", "POST"])
 def calendar():
-    return render_template("calendar.html", events=events)
+    if request.method == "GET":
+
+        return render_template("calendar.html", events=events)
+    elif request.method == "POST":
+        date = request.form['datetime']
+        text = request.form['text']
+        return render_template("show.html", date=date, text=text)
+
+# @app.route("/caleder/vi", methods=["GET","POST"])
+# def input_view():
+#     value = request.form"text"
+
+#     return render_template("show.html", value=value)
 
 
 if __name__ == "__main__":
