@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
 
-events = [{"title": "event1", "date": "2025-9-15"}, {"title": "event2", "date": "2025-9-20"}]
+events = [
+    {"title": "event1", "date": "2025-9-15"},
+    {"title": "event2", "date": "2025-9-20"},
+    # {"title": "t", "date": "d"}
+]
 
 
 @app.route("/")
@@ -12,15 +16,27 @@ def home():
 
 @app.route("/calendar", methods=["GET", "POST"])
 def calendar():
-    if request.method == "GET":
 
+    # for t, d in zip(text, datetime):
+    #     events.append({"text : t," "datetime : d"})
+
+    # return render_template("calendar.html", events=events)
+    if request.method == "GET":
+        print(events)
         return render_template("calendar.html", events=events)
     elif request.method == "POST":
-        date = request.form['datetime']
-        text = request.form['text']
-        return render_template("show.html", date=date, text=text)
+        datetime = request.form["datetime"]
+        title = request.form["title"]
+        # return render_template("show.html", date=date, text=text)
 
-# @app.route("/caleder/vi", methods=["GET","POST"])
+        new_event = {"title": title, "date": datetime}
+
+    events.append(new_event)
+
+    # @app.route("/caleder/vi", methods=["GET","POST"])
+    return redirect(url_for("calendar"))
+
+
 # def input_view():
 #     value = request.form"text"
 

@@ -13,24 +13,32 @@
     <div id="calendar"></div>
     <form action="/calendar" method="POST">
         <input type="datetime-local" name="datetime" placeholder="日時を入力してください">
-        <input type="text" name="text" "スケジュールをを入力して下さい">
+        <input type="text" name="text" placeholder=="スケジュールをを入力して下さい">
         <input type="submit" value="送信">
     </form>
+    <div>{{ events[0]["title"]}}</div>
 
 
 
     <script>
+        
         let calendarEl = document.getElementById('calendar');
 
-        let calendar = new FullCalendar.Calendar(calendarEl, {
-            events: [
-                {% for event in events %}
-            {
-                title: '{{ event.title }}',
-                start: '{{ event.date }}',
-            },
+        const eventData = [
+            {% for event in events %}
+                {
+                    title: '{{ event.title }}',
+                    start: '{{ event.date }}',
+                }
+                {% if not loop.last %}, {% endif %}
             {% endfor %}
-            ]
+        ]
+        console.log(eventData)
+        
+
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+            events: eventData,
+            initialValue: "dayGridMonth"
         });
 
         calendar.render();
