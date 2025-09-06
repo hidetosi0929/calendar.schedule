@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
@@ -22,15 +23,17 @@ def calendar():
 
     # return render_template("calendar.html", events=events)
     if request.method == "GET":
-        print(events)
+        print( events)
         return render_template("calendar.html", events=events)
     elif request.method == "POST":
+
         datetime = request.form["datetime"]
-        title = request.form["title"]
+        title = request.form["text"]
         # return render_template("show.html", date=date, text=text)
 
         new_event = {"title": title, "date": datetime}
-
+        text = request.form["text"]
+    
     events.append(new_event)
 
     # @app.route("/caleder/vi", methods=["GET","POST"])

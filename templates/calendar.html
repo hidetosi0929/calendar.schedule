@@ -21,28 +21,39 @@
 
 
     <script>
-        
-        let calendarEl = document.getElementById('calendar');
+      let calendarEl = document.getElementById('calendar');
 
-        const eventData = [
-            {% for event in events %}
-                {
-                    title: '{{ event.title }}',
-                    start: '{{ event.date }}',
-                }
-                {% if not loop.last %}, {% endif %}
-            {% endfor %}
-        ]
-        console.log(eventData)
-        
+        // JSON形式でeventsデータを取得
+        let eventsData = {{ events| tojson }};
 
-        let calendar = new FullCalendar.Calendar(calendarEl, {
-            events: eventData,
-            initialValue: "dayGridMonth"
+        // デバッグ用：eventsDataの内容をコンソールに出力
+        console.log('Events data:', eventsData);
+
+        // 日付形式をFullCalendar用に変換
+        let formattedEvents = eventsData.map(event => {
+            return {
+                title: event.title,
+                start: event.date, // FullCalendarは 'YYYY-MM-DD' 形式を認識します
+                allDay: true // 終日イベントとして設定
+            };
         });
 
-        calendar.render();
+        console.log('Formatted events:', formattedEvents);
 
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: formattedEvents,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            locale: 'ja', // 日本語ロケール
+            height: 'auto'
+        });
+
+        calendar.render();  
+        
     </script>
 </body>
 
